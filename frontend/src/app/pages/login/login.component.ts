@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -54,7 +55,12 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       console.log('Login attempt:', username, password);
-      // TODO: Add authentication logic or call your backend here
+      
+      // Simulate successful login and redirect to home
+      console.log('Login successful! Redirecting to home...');
+      this.router.navigate(['/home']);
+      
+      // TODO: Replace this with actual authentication logic when backend is ready
     } else {
       // Mark all fields as touched to show validation errors
       this.markFormGroupTouched();
