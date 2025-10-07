@@ -20,7 +20,7 @@ public class StreamController {
      * @param lastEventID
      * @return
      */
-    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public SseEmitter stream(@RequestHeader(value="Last-Event-ID", required=false) String lastEventID) {
         SseEmitter emitter = new SseEmitter(0L);
         clients.add(emitter);
@@ -57,8 +57,8 @@ public class StreamController {
         });
     }
 
-    @PostMapping(value = "/send")
-    public void send(@RequestBody String text) {
-        broadcast(text);
+    @PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void send(@RequestBody Object json) {
+        broadcast(json);
     }
 }
