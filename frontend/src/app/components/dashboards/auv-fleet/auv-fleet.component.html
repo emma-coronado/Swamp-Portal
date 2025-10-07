@@ -1,0 +1,55 @@
+<!-- AUV Fleet Dashboard -->
+<main class="space-y-6">
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-6">
+    <app-status-box
+      title="Fleet Status"
+      [mainValue]="fleetStats.totalVehicles + '/12'"
+      subtitle="Vehicles Active"
+      [showIndicator]="true"
+      indicatorColor="green">
+    </app-status-box>
+
+    <app-status-box
+      title="Active Missions"
+      [mainValue]="fleetStats.activeMissions.toString()"
+      subtitle="Deep Sea Operations"
+      [showIndicator]="true"
+      indicatorColor="blue">
+    </app-status-box>
+
+    <app-status-box
+      title="Max Depth"
+      [mainValue]="fleetStats.depthRange"
+      subtitle="Operating Range"
+      [showIndicator]="true"
+      indicatorColor="blue">
+    </app-status-box>
+
+    <app-status-box
+      title="Avg Battery"
+      [mainValue]="fleetStats.batteryStatus"
+      subtitle="Fleet Condition"
+      [showIndicator]="true"
+      indicatorColor="green">
+    </app-status-box>
+  </div>
+
+  <!-- Mission Status Table -->
+  <app-data-table
+    title="Active Missions"
+    [columns]="missionsTableColumns"
+    [data]="missions">
+  </app-data-table>
+
+  <!-- Navigation Chart Section -->
+  <div>
+    <app-nautical-map 
+      [points]="navigationPoints" 
+      [width]="800" 
+      [height]="500"
+      title="Mission Navigation Chart">
+    </app-nautical-map>
+  </div>
+
+</main>

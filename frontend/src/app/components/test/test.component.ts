@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NauticalMapComponent, MapPoint } from '../nautical-map/nautical-map.component';
+import { NauticalMapComponent, MapPoint } from '../dashboards/components/nautical-map/nautical-map.component';
 
 @Component({
   selector: 'app-test',

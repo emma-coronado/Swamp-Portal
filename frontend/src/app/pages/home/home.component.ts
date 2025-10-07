@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuvFleetComponent } from '../../components/fleet/auv-fleet/auv-fleet.component';
-import { DroneFleetComponent } from '../../components/fleet/drone-fleet/drone-fleet.component';
-import { AutonomousFleetComponent } from '../../components/fleet/autonomous-fleet/autonomous-fleet.component';
+import { AuvFleetComponent } from '../../components/dashboards/auv-fleet/auv-fleet.component';
+import { DroneFleetComponent } from '../../components/dashboards/drone-fleet/drone-fleet.component';
+import { AutonomousFleetComponent } from '../../components/dashboards/autonomous-fleet/autonomous-fleet.component';
 import { TestComponent } from '../../components/test/test.component';
 
 @Component({
