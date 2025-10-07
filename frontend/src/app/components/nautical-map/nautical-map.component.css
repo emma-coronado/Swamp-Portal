@@ -1,0 +1,52 @@
+/* Nautical Map Component Styles */
+.nautical-map-container {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    transition: all 0.3s ease;
+}
+
+.nautical-map-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
+}
+
+.map-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+canvas {
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Legend styles */
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Coordinate display */
+.coordinate-display {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    backdrop-filter: blur(8px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+}
