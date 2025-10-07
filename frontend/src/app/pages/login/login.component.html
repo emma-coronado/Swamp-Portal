@@ -1,0 +1,130 @@
+<main class="bg-slate-900 text-white font-sans">
+  <div class="login-container flex items-center justify-center p-4">
+    <div class="floating-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <div class="login-card rounded-2xl p-8 w-full max-w-md relative z-10">
+      <div class="text-center mb-8">
+        <div class="flex justify-center mb-4">
+          <div
+            class="fleet-icon w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-xl"
+          >
+            VF
+          </div>
+        </div>
+        <h1 class="text-2xl font-bold mb-2">Vehicle Fleet</h1>
+        <p class="text-slate-400 text-sm">Management System Access</p>
+      </div>
+
+      <form (ngSubmit)="onLogin()" [formGroup]="loginForm" class="space-y-6">
+        <div class="relative">
+          <label
+            for="username"
+            class="block text-sm font-medium text-slate-300 mb-2"
+          >
+            Username
+          </label>
+          <div class="relative">
+            <svg
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4
+                1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8
+                1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              />
+            </svg>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              [class]="'input-field w-full bg-slate-700/50 border rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none transition-all duration-200 ' + 
+                       (isFieldInvalid('username') ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' : 'border-slate-600 focus:border-blue-500')"
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+          <!-- Validation error text -->
+          <div 
+            *ngIf="isFieldInvalid('username')" 
+            class="mt-1 text-xs text-red-400"
+          >
+            {{ getUsernameError() }}
+          </div>
+        </div>
+
+        <div class="relative">
+          <label
+            for="password"
+            class="block text-sm font-medium text-slate-300 mb-2"
+          >
+            Password
+          </label>
+          <div class="relative">
+            <svg
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M18 8h-1V6c0-2.76-2.24-5-5-5S7
+                3.24 7 6v2H6c-1.1 0-2 .9-2
+                2v10c0 1.1.9 2 2
+                2h12c1.1 0 2-.9
+                2-2V10c0-1.1-.9-2-2-2zm-6
+                9c-1.1 0-2-.9-2-2s.9-2
+                2-2 2 .9 2
+                2-.9 2-2
+                2zm3.1-9H8.9V6c0-1.71
+                1.39-3.1 3.1-3.1 1.71
+                0 3.1 1.39 3.1 3.1v2z"
+              />
+            </svg>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              [class]="'input-field w-full bg-slate-700/50 border rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none transition-all duration-200 ' + 
+                       (isFieldInvalid('password') ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' : 'border-slate-600 focus:border-blue-500')"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <!-- Validation error text -->
+          <div 
+            *ngIf="isFieldInvalid('password')" 
+            class="mt-1 text-xs text-red-400"
+          >
+            {{ getPasswordError() }}
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid"
+          [class]="'w-full py-3 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 ' + 
+                   (loginForm.invalid ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'login-btn text-white hover:shadow-lg')"
+        >
+          Access Fleet Dashboard
+        </button>
+
+        
+      </form>
+
+      <div class="mt-8 pt-6 border-t border-slate-700/50">
+        <div class="text-center text-xs text-slate-400">
+          <p>Secure Connection Established</p>
+          <p class="mt-1">© 2025 "What Are You Doing In My Swamp?"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
