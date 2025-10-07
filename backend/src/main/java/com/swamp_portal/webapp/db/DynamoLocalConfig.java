@@ -8,16 +8,20 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
 
 @Configuration
 @Profile("local")
 public class DynamoLocalConfig {
+    @Value("${DDB_ENDPOINT:http://localhost:9000}")
+    private String endpoint;
+
     @Bean
     public DynamoDbClient dynamoDbClient() {
         return DynamoDbClient.builder()
-                .endpointOverride(URI.create("http://localhost:9000"))
+                .endpointOverride(URI.create(endpoint))
                 .region(Region.US_EAST_1)
                 .credentialsProvider(
                         StaticCredentialsProvider.create(AwsBasicCredentials.create("dummy","dummy"))
