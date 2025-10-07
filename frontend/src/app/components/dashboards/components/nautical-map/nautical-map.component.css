@@ -1,14 +1,9 @@
 /* Nautical Map Component Styles */
 .nautical-map-container {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(148, 163, 184, 0.1);
     transition: all 0.3s ease;
 }
 
 .nautical-map-container:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
 }
 
 .map-wrapper {
