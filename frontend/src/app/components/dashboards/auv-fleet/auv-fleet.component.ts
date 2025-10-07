@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StatusBoxComponent } from '../components/status-box.component';
 import { DataTableComponent, TableColumn } from '../components/data-table.component';
 import { NauticalMapComponent, MapPoint } from '../components/nautical-map/nautical-map.component';
+import { StreamService, StreamData } from '../../../services/stream';
+
 
 @Component({
   selector: 'app-auv-fleet',
@@ -12,7 +14,7 @@ import { NauticalMapComponent, MapPoint } from '../components/nautical-map/nauti
 })
 export class AuvFleetComponent {
   fleetStats = {
-    totalVehicles: 12,
+    totalVehicles: 0, // updated dynamically
     activeMissions: 5,
     depthRange: '0-6000m',
     batteryStatus: '87%'
@@ -52,13 +54,6 @@ export class AuvFleetComponent {
     }
   ];
 
-  recentActivity = [
-    { time: '2 min ago', message: 'AUV-001 reached target depth of 2,400m', type: 'success' },
-    { time: '15 min ago', message: 'AUV-003 battery level at 65%, returning to base', type: 'warning' },
-    { time: '32 min ago', message: 'AUV-002 completed pipeline segment 7', type: 'info' },
-    { time: '1 hour ago', message: 'AUV-004 started oil rig perimeter survey', type: 'success' }
-  ];
-
   // Sample navigation data for the nautical map
   navigationPoints: MapPoint[] = [
     { x: 10, y: 20, label: 'Start Port', type: 'port' },
@@ -72,4 +67,17 @@ export class AuvFleetComponent {
     { x: 60, y: 80, label: 'Shallow Water', type: 'hazard' },
     { x: 35, y: 70, label: 'End Port', type: 'port' }
   ];
+
+  constructor(private streamService: StreamService) {}
+
+  ngOnInit() {
+    // Subscribe to live SSE data
+    this.streamService.streamData$.subscribe((data: StreamData | null) => {
+      if (data) {
+        this.fleetStats.totalVehicles = data.NumSubs;
+        // Optional: dynamically update other parts of UI later
+        // e.g. this.vehicles = data.Subs.map(...)
+      }
+    });
+  }
 }
