@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Cache deps
 COPY pom.xml .
-RUN mvn -q -DskipTests dependency:go-offline
+#RUN mvn -q -DskipTests dependency:go-offline
 
 # Build
 COPY src ./src
