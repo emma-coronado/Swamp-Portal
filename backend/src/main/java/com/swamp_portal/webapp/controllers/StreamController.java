@@ -1,5 +1,11 @@
 package com.swamp_portal.webapp.controllers;
 
+import com.swamp_portal.webapp.AdminGuard;
+import com.swamp_portal.webapp.SessionService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -14,6 +20,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @RequestMapping("/api")
 public class StreamController {
     private final Set<SseEmitter> clients = new CopyOnWriteArraySet<>();
+    private final SessionService sessions;
+    private final AdminGuard admin;
+    public StreamController(SessionService sessions, AdminGuard admin) {
+        this.sessions = sessions;
+        this.admin = admin;
+    }
 
     /**
      * Call this API to subscribe to SSE events.
@@ -21,7 +33,15 @@ public class StreamController {
      * @return
      */
     @GetMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
-    public SseEmitter stream(@RequestHeader(value="Last-Event-ID", required=false) String lastEventID) {
+    public SseEmitter stream(@RequestHeader(value="Last-Event-ID", required=false) String lastEventID, HttpServletRequest req) {
+
+        String user = sessions.getUser(req);
+        if (user == null) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Login Required!"
+            );
+        }
+
         SseEmitter emitter = new SseEmitter(0L);
         clients.add(emitter);
 
@@ -58,7 +78,8 @@ public class StreamController {
     }
 
     @PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void send(@RequestBody Object json) {
+    public void send(@RequestBody Object json, HttpServletRequest req) {
+        admin.requireAdmin(req);
         broadcast(json);
     }
 }
