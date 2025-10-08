@@ -5,6 +5,11 @@ import { AuthService } from '../../services/auth.service';
 import { AuvFleetComponent } from '../../components/dashboards/auv-fleet/auv-fleet.component';
 import { AutoGatorsComponent } from '../../components/dashboards/AutoGators/AutoGators.component';
 import { AardvarkComponent } from '../../components/dashboards/Aardvark/Aardvark.component';
+import { GoblinGangComponent } from '../../components/dashboards/GoblinGang/GoblinGang.component';
+import { ClankersComponent } from '../../components/dashboards/Clankers/Clankers.component';
+import { TheHivemindComponent } from '../../components/dashboards/TheHivemind/TheHivemind.component';
+import { ProberComponent } from '../../components/dashboards/Prober/Prober.component';
+import { OneComponent } from '../../components/dashboards/One/One.component';
 
 // Interface for dashboard configuration
 interface DashboardItem {
@@ -20,7 +25,7 @@ interface DashboardItem {
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  imports: [CommonModule, AuvFleetComponent, AutoGatorsComponent, AardvarkComponent]
+  imports: [CommonModule, AuvFleetComponent, AutoGatorsComponent, AardvarkComponent, GoblinGangComponent, ClankersComponent, TheHivemindComponent, ProberComponent, OneComponent]
 })
 export class HomeComponent {
   currentUser = 'Admin'; // Placeholder for now
@@ -51,6 +56,46 @@ export class HomeComponent {
       componentSelector: 'app-Aardvark',
       title: 'Aardvark Dashboard',
       icon: 'M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z'
+    },
+    {
+      id: 'goblingang',
+      displayName: 'Project Name',
+      subtitle: 'GoblinGang',
+      componentSelector: 'app-GoblinGang',
+      title: 'GoblinGang Dashboard',
+      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+    },
+    {
+      id: 'clankers',
+      displayName: 'Project Name',
+      subtitle: 'Clankers',
+      componentSelector: 'app-Clankers',
+      title: 'Clankers Dashboard',
+      icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547A8.014 8.014 0 004 21h16a8.014 8.014 0 00-.244-5.572z'
+    },
+    {
+      id: 'thehivemind',
+      displayName: 'Project Name',
+      subtitle: 'The Hivemind',
+      componentSelector: 'app-TheHivemind',
+      title: 'The Hivemind Dashboard',
+      icon: 'M9 12a3 3 0 11-6 0 3 3 0 016 0zM21 12a3 3 0 11-6 0 3 3 0 616 0zM15 6a3 3 0 11-6 0 3 3 0 016 0zM15 18a3 3 0 11-6 0 3 3 0 616 0z'
+    },
+    {
+      id: 'prober',
+      displayName: 'Project Name',
+      subtitle: 'Prober',
+      componentSelector: 'app-Prober',
+      title: 'Prober Dashboard',
+      icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+    },
+    {
+      id: 'one',
+      displayName: 'Project Name',
+      subtitle: 'One',
+      componentSelector: 'app-One',
+      title: 'One Dashboard',
+      icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
     }
   ];
 
