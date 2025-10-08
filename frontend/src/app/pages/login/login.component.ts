@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, LoginRequest } from '../../services/auth.service';
+import { StreamService } from '../../services/stream';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,12 @@ export class LoginComponent {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router, 
+    private authService: AuthService,
+    private streamService: StreamService
+  ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -70,7 +76,17 @@ export class LoginComponent {
           
           // Backend returns { "status": "ok" } on successful login
           if (response && response.status === 'ok') {
-            console.log('Login successful! Redirecting to home...');
+            console.log('Login successful! Starting stream connection...');
+            
+            // Start the stream connection in the background (don't await)
+            this.streamService.connect().then(() => {
+              console.log('Stream connection established');
+            }).catch((error) => {
+              console.error('Failed to establish stream connection:', error);
+              // Stream failure doesn't affect navigation
+            });
+            
+            console.log('Redirecting to home...');
             this.router.navigate(['/home']);
           } else {
             this.errorMessage = 'Login failed. Please check your credentials.';

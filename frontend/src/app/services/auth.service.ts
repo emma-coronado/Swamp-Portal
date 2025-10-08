@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { StreamService } from './stream';
 
 export interface LoginRequest {
   username: string;
@@ -17,7 +18,7 @@ export interface LoginResponse {
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private streamService: StreamService) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     const headers = new HttpHeaders({
@@ -35,6 +36,9 @@ export class AuthService {
   // Instead, we'll rely on the session cookie for authentication
 
   logout(): Observable<any> {
+    // Disconnect stream before logout
+    this.streamService.disconnect();
+    
     // Call the logout endpoint to clear the session cookie
     return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true });
   }
