@@ -2,7 +2,7 @@
 export interface StreamData {
   NumSubs: number;
   Subs: {
-    name: string;
+    Name: string;  // Changed from 'name' to 'Name' to match server data
     Battery: number;
     TravelPlan: [number, number, number, number][];
   }[];

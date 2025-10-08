@@ -1,20 +1,80 @@
 <!-- AUV Fleet Dashboard -->
 <main class="space-y-6">
+  <!-- Connection Status Indicator -->
+  <div class="mb-4 p-3 rounded-lg border" 
+       [ngClass]="{
+         'border-green-500 bg-green-500/10 text-green-400': connectionStatus === 'connected',
+         'border-yellow-500 bg-yellow-500/10 text-yellow-400': connectionStatus === 'connecting',
+         'border-red-500 bg-red-500/10 text-red-400': connectionStatus === 'error',
+         'border-gray-500 bg-gray-500/10 text-gray-400': connectionStatus === 'disconnected'
+       }">
+    <div class="flex items-center">
+      <div class="flex items-center space-x-2">
+        <div class="w-2 h-2 rounded-full"
+             [ngClass]="{
+               'bg-green-400 animate-pulse': connectionStatus === 'connected',
+               'bg-yellow-400 animate-spin': connectionStatus === 'connecting',
+               'bg-red-400': connectionStatus === 'error',
+               'bg-gray-400': connectionStatus === 'disconnected'
+             }"></div>
+        <span class="text-sm font-medium">
+          <ng-container [ngSwitch]="connectionStatus">
+            <span *ngSwitchCase="'connected'">Live Data Stream Connected</span>
+            <span *ngSwitchCase="'connecting'">Connecting to Data Stream...</span>
+            <span *ngSwitchCase="'error'">Connection Error</span>
+            <span *ngSwitchDefault>Data Stream Disconnected</span>
+          </ng-container>
+        </span>
+      </div>
+      <!-- Action buttons -->
+      <div class="ml-auto flex space-x-2">
+        <button *ngIf="connectionStatus === 'error' || connectionStatus === 'disconnected'"
+                (click)="retryConnection()"
+                class="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
+          Retry Connection
+        </button>
+        <!-- Debug buttons for development (you can remove these in production) -->
+        <button (click)="debugStream()"
+                class="px-3 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors">
+          Debug
+        </button>
+        <button (click)="testStreamEndpoint()"
+                class="px-3 py-1 text-xs bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors">
+          Test API
+        </button>
+        <button (click)="testManualUpdate()"
+                class="px-3 py-1 text-xs bg-orange-600 hover:bg-orange-700 text-white rounded-md transition-colors">
+          Test Update
+        </button>
+        <button (click)="tryEventSource()"
+                class="px-3 py-1 text-xs bg-teal-600 hover:bg-teal-700 text-white rounded-md transition-colors">
+          EventSource
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="flex items-center justify-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    <span class="ml-3 text-gray-400">Waiting for data...</span>
+  </div>
+
   <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-6" [class.opacity-50]="isLoading">
     <app-status-box
       title="Fleet Status"
-      [mainValue]="fleetStats.totalVehicles + '/12'"
+      [mainValue]="isLoading ? 'Loading...' : fleetStats.totalVehicles + '/12'"
       subtitle="Vehicles Active"
-      [showIndicator]="true"
+      [showIndicator]="!isLoading"
       indicatorColor="green">
     </app-status-box>
 
     <app-status-box
       title="Active Missions"
-      [mainValue]="fleetStats.activeMissions.toString()"
+      [mainValue]="isLoading ? 'Loading...' : fleetStats.activeMissions.toString()"
       subtitle="Deep Sea Operations"
-      [showIndicator]="true"
+      [showIndicator]="!isLoading"
       indicatorColor="blue">
     </app-status-box>
 
@@ -22,7 +82,7 @@
       title="Max Depth"
       [mainValue]="fleetStats.depthRange"
       subtitle="Operating Range"
-      [showIndicator]="true"
+      [showIndicator]="!isLoading"
       indicatorColor="blue">
     </app-status-box>
 
@@ -30,25 +90,27 @@
       title="Avg Battery"
       [mainValue]="fleetStats.batteryStatus"
       subtitle="Fleet Condition"
-      [showIndicator]="true"
-      indicatorColor="green">
+      [showIndicator]="!isLoading"
+      [indicatorColor]="isLoading ? 'gray' : 'green'">
     </app-status-box>
   </div>
 
   <!-- Mission Status Table -->
-  <app-data-table
-    title="Active Missions"
-    [columns]="missionsTableColumns"
-    [data]="missions">
-  </app-data-table>
+  <div [class.opacity-50]="isLoading">
+    <app-data-table
+      [title]="isLoading ? 'Active Missions (Loading...)' : 'Active Missions'"
+      [columns]="missionsTableColumns"
+      [data]="missions">
+    </app-data-table>
+  </div>
 
   <!-- Navigation Chart Section -->
-  <div>
+  <div [class.opacity-50]="isLoading">
     <app-nautical-map 
       [points]="navigationPoints" 
       [width]="800" 
       [height]="500"
-      title="Mission Navigation Chart">
+      [title]="isLoading ? 'Mission Navigation Chart (Loading...)' : 'Mission Navigation Chart'">
     </app-nautical-map>
   </div>
 

@@ -78,16 +78,17 @@ export class LoginComponent {
           if (response && response.status === 'ok') {
             console.log('Login successful! Starting stream connection...');
             
-            // Start the stream connection in the background (don't await)
-            this.streamService.connect().then(() => {
-              console.log('Stream connection established');
-            }).catch((error) => {
-              console.error('Failed to establish stream connection:', error);
-              // Stream failure doesn't affect navigation
-            });
-            
             console.log('Redirecting to home...');
-            this.router.navigate(['/home']);
+            this.router.navigate(['/home']).then(() => {
+              // Start stream connection after navigation completes
+              console.log('Navigation complete, starting stream connection...');
+              this.streamService.connect().then(() => {
+                console.log('✅ Stream connection established after navigation');
+              }).catch((error) => {
+                console.error('❌ Failed to establish stream connection:', error);
+                // Stream failure doesn't affect the app
+              });
+            });
           } else {
             this.errorMessage = 'Login failed. Please check your credentials.';
           }
