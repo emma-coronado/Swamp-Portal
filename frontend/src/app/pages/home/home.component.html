@@ -14,75 +14,26 @@
       
       <nav class="space-y-2">
         <button 
+          *ngFor="let dashboard of dashboards"
           class="dashboard-nav w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors"
-          [class]="currentDashboard === 'auv' ? 'btn-primary text-white' : 'text-slate-300 hover:bg-slate-700'"
-          (click)="switchDashboard('auv')"
+          [class]="currentDashboard === dashboard.id ? 'btn-primary text-white' : 'text-slate-300 hover:bg-slate-700'"
+          (click)="switchDashboard(dashboard.id)"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            <path [attr.d]="dashboard.icon"/>
           </svg>
           <div class="text-left">
-            <div class="font-medium">AUV Fleet</div>
-            <div class="text-xs opacity-75">Underwater Vehicles</div>
-          </div>
-        </button>
-        
-        <button 
-          class="dashboard-nav w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors"
-          [class]="currentDashboard === 'drone' ? 'btn-primary text-white' : 'text-slate-300 hover:bg-slate-700'"
-          (click)="switchDashboard('drone')"
-        >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-          </svg>
-          <div class="text-left">
-            <div class="font-medium">Drone Fleet</div>
-            <div class="text-xs opacity-75">Aerial Surveillance</div>
-          </div>
-        </button>
-        
-        <button 
-          class="dashboard-nav w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors"
-          [class]="currentDashboard === 'autonomous' ? 'btn-primary text-white' : 'text-slate-300 hover:bg-slate-700'"
-          (click)="switchDashboard('autonomous')"
-        >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-          </svg>
-          <div class="text-left">
-            <div class="font-medium">Autonomous Vehicles</div>
-            <div class="text-xs opacity-75">Self-Driving Cars</div>
-          </div>
-        </button>
-
-        <button 
-          class="dashboard-nav w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors"
-          [class]="currentDashboard === 'test' ? 'btn-primary text-white' : 'text-slate-300 hover:bg-slate-700'"
-          (click)="switchDashboard('test')"
-        >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <div class="text-left">
-            <div class="font-medium">Test Page</div>
-            <div class="text-xs opacity-75">System Testing</div>
+            <div class="font-medium">{{ dashboard.displayName }}</div>
+            <div class="text-xs opacity-75">{{ dashboard.subtitle }}</div>
           </div>
         </button>
       </nav>
       
       <div class="mt-8 pt-6 border-t border-slate-700">
-        <div class="space-y-3">
-          <div class="flex items-center justify-between text-sm">
-            <span class="text-slate-400">System Status</span>
-            <span class="text-green-400">●  Online</span>
-          </div>
+        <div class="space-y-3">    
           <div class="flex items-center justify-between text-sm">
             <span class="text-slate-400">Active Modules</span>
-            <span class="text-white font-medium">4</span>
-          </div>
-          <div class="flex items-center justify-between text-sm">
-            <span class="text-slate-400">Total Vehicles</span>
-            <span class="text-white font-medium">{{ getTotalVehicles() }}</span>
+            <span class="text-white font-medium">{{ dashboards.length }}</span>
           </div>
         </div>
       </div>
@@ -115,9 +66,8 @@
       <!-- Dynamic Fleet Component Display -->
       <div [ngSwitch]="currentDashboard">
         <app-auv-fleet *ngSwitchCase="'auv'"></app-auv-fleet>
-        <app-drone-fleet *ngSwitchCase="'drone'"></app-drone-fleet>
-        <app-autonomous-fleet *ngSwitchCase="'autonomous'"></app-autonomous-fleet>
-        <app-test *ngSwitchCase="'test'"></app-test>
+        <app-AutoGators *ngSwitchCase="'autogators'"></app-AutoGators>
+        <app-Aardvark *ngSwitchCase="'aardvark'"></app-Aardvark>
       </div>
 
     </div>
