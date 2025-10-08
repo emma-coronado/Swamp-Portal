@@ -21,25 +21,25 @@ export class AuvFleetComponent {
   };
 
   missions = [
-    { id: 'AUV-001', mission: 'Deep Sea Survey', depth: '2,400m', status: 'Active', battery: 92 },
-    { id: 'AUV-002', mission: 'Pipeline Inspection', depth: '1,200m', status: 'Active', battery: 78 },
-    { id: 'AUV-003', mission: 'Marine Biology', depth: '800m', status: 'Returning', battery: 65 },
-    { id: 'AUV-004', mission: 'Oil Rig Survey', depth: '3,100m', status: 'Active', battery: 89 },
-    { id: 'AUV-005', mission: 'Cable Mapping', depth: '1,800m', status: 'Standby', battery: 95 }
+    { id: 'AUV-001', maintenanceStatus: 'Working', battery: 92, current_role: 'MASTER' },
+    { id: 'AUV-002', maintenanceStatus: 'Working', battery: 78, current_role: 'PATROL' },
+    { id: 'AUV-003', maintenanceStatus: 'Due for Maintenance', battery: 65, current_role: 'SLAVE' },
+    { id: 'AUV-004', maintenanceStatus: 'Working', battery: 89, current_role: 'BATTERY_TANKER' },
+    { id: 'AUV-005', maintenanceStatus: 'Failing', battery: 45, current_role: 'SLAVE' },
+    { id: 'AUV-006', maintenanceStatus: 'Working', battery: 88, current_role: 'PATROL' },
+    { id: 'AUV-007', maintenanceStatus: 'Due for Maintenance', battery: 72, current_role: 'MASTER' }
   ];
 
   missionsTableColumns: TableColumn[] = [
     { key: 'id', label: 'Vehicle ID', type: 'text' },
-    { key: 'mission', label: 'Mission', type: 'text' },
-    { key: 'depth', label: 'Depth', type: 'highlight', highlightColor: 'text-cyan-400' },
     { 
-      key: 'status', 
-      label: 'Status', 
+      key: 'maintenanceStatus', 
+      label: 'Maintenance Status', 
       type: 'badge',
       badgeColors: {
-        'Active': 'bg-green-600/20 text-green-400',
-        'Returning': 'bg-yellow-600/20 text-yellow-400',
-        'Standby': 'bg-slate-600/20 text-slate-400'
+        'Working': 'bg-green-600/20 text-green-400',
+        'Due for Maintenance': 'bg-yellow-600/20 text-yellow-400',
+        'Failing': 'bg-red-600/20 text-red-400'
       }
     },
     { 
@@ -51,6 +51,12 @@ export class AuvFleetComponent {
         medium: 'bg-yellow-500',
         low: 'bg-red-500'
       }
+    },
+    {
+      key: 'current_role',
+      label: 'Current Role',
+      type: 'highlight',
+      highlightColor: 'text-cyan-400'
     }
   ];
 
