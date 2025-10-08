@@ -16,6 +16,7 @@ Required: **Docker**
 5. Open Chrome (any browser works but front-end development will be built around Chrome, so that is recommended)and go to "localhost:8080" to access the Spring backend
 6. Username: ```root```, Password: ```gogators```
 7. Navigate to "localhost:4200" to access the front end
+8. Login with username "admin" and password "admin" for dev purposes.
 
 #### IntelliJ-Specific Shortcut
 Required: **Docker**, **Docker Extension**
