@@ -78,15 +78,10 @@ export class LoginComponent {
           if (response && response.status === 'ok') {
             console.log('Login successful! Starting stream connection...');
             
-            console.log('Redirecting to home...');
             this.router.navigate(['/home']).then(() => {
               // Start stream connection after navigation completes
-              console.log('Navigation complete, starting stream connection...');
-              this.streamService.connect().then(() => {
-                console.log('✅ Stream connection established after navigation');
-              }).catch((error) => {
-                console.error('❌ Failed to establish stream connection:', error);
-                // Stream failure doesn't affect the app
+              this.streamService.connect().catch((error) => {
+                console.error('Failed to establish stream connection:', error);
               });
             });
           } else {

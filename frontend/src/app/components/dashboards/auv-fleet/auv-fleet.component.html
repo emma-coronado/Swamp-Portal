@@ -26,31 +26,12 @@
           </ng-container>
         </span>
       </div>
-      <!-- Action buttons -->
-      <div class="ml-auto flex space-x-2">
-        <button *ngIf="connectionStatus === 'error' || connectionStatus === 'disconnected'"
-                (click)="retryConnection()"
-                class="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
-          Retry Connection
-        </button>
-        <!-- Debug buttons for development (you can remove these in production) -->
-        <button (click)="debugStream()"
-                class="px-3 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors">
-          Debug
-        </button>
-        <button (click)="testStreamEndpoint()"
-                class="px-3 py-1 text-xs bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors">
-          Test API
-        </button>
-        <button (click)="testManualUpdate()"
-                class="px-3 py-1 text-xs bg-orange-600 hover:bg-orange-700 text-white rounded-md transition-colors">
-          Test Update
-        </button>
-        <button (click)="tryEventSource()"
-                class="px-3 py-1 text-xs bg-teal-600 hover:bg-teal-700 text-white rounded-md transition-colors">
-          EventSource
-        </button>
-      </div>
+      <!-- Retry button for connection issues -->
+      <button *ngIf="connectionStatus === 'error' || connectionStatus === 'disconnected'"
+              (click)="retryConnection()"
+              class="ml-auto px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
+        Retry Connection
+      </button>
     </div>
   </div>
 

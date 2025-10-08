@@ -96,11 +96,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
 
     // Subscribe to live SSE data
     this.streamSubscription = this.streamService.streamData$.subscribe((data: StreamData | null) => {
-      const timestamp = new Date().toLocaleTimeString();
-      console.log(`🔄 [${timestamp}] AUV Fleet Component received data:`, data);
-      
       if (data && data.Subs && data.Subs.length > 0) {
-        console.log(`✅ [${timestamp}] Processing valid SSE data with`, data.Subs.length, 'submarines');
         this.isLoading = false;
         
         // Update fleet statistics
@@ -111,30 +107,25 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
         const avgBattery = data.Subs.reduce((sum, sub) => sum + (sub.Battery * 100), 0) / data.Subs.length;
         this.fleetStats.batteryStatus = `${Math.round(avgBattery)}%`;
         
-        console.log('📊 Updated fleet stats:', this.fleetStats);
-        
         // Transform SSE data to match component structure
         this.missions = data.Subs.map((sub, index) => ({
-          id: sub.Name || `AUV-${String(index + 1).padStart(3, '0')}`,  // Changed from sub.name to sub.Name
+          id: sub.Name || `AUV-${String(index + 1).padStart(3, '0')}`,
           maintenanceStatus: this.getMaintenanceStatus(sub.Battery),
           battery: Math.round(sub.Battery * 100), // Convert 0.1 to 10% format
           current_role: this.getCurrentRole(sub, index)
         }));
         
-        console.log('🚢 Updated missions data:', this.missions);
-        
         // Update navigation points based on travel plans
         this.updateNavigationPoints(data.Subs);
         
-        // Force change detection (Angular might need this)
-        console.log('🔄 Data update complete, triggering UI refresh');
+        // Trigger change detection
         this.cdr.detectChanges();
         
       } else if (data === null) {
         // Handle initial null values by keeping loading state
-        console.log('⚠️ Received null data from stream, keeping placeholder data');
+        console.log('Waiting for stream data...');
       } else if (data) {
-        console.log('⚠️ Received data but no valid Subs array:', data);
+        console.warn('Received data but no valid Subs array:', data);
       }
     });
   }
@@ -182,7 +173,6 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
 
   // Method to manually retry connection
   retryConnection() {
-    console.log('Manually retrying SSE connection...');
     this.streamService.disconnect();
     // Wait a moment before reconnecting
     setTimeout(() => {
@@ -190,83 +180,5 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
         console.error('Manual retry failed:', error);
       });
     }, 1000);
-  }
-
-  // Debug method for development
-  debugStream() {
-    this.streamService.debugStatus();
-  }
-
-  // Test method to manually fetch stream data
-  async testStreamEndpoint() {
-    console.log('🧪 Testing stream endpoint manually...');
-    try {
-      const response = await fetch('http://localhost:8080/api/stream', {
-        method: 'GET',
-        credentials: 'include'
-      });
-      
-      console.log('📡 Stream endpoint response status:', response.status);
-      console.log('📋 Stream endpoint response headers:', Object.fromEntries(response.headers.entries()));
-      
-      if (response.body) {
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        
-        // Read first few chunks to see what's being sent
-        for (let i = 0; i < 3; i++) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          
-          const chunk = decoder.decode(value, { stream: true });
-          console.log(`📦 Stream chunk ${i + 1}:`, chunk);
-        }
-        
-        reader.releaseLock();
-      }
-    } catch (error) {
-      console.error('❌ Test stream endpoint failed:', error);
-    }
-  }
-
-  // Manual test data update to verify UI reactivity
-  testManualUpdate() {
-    console.log('🧪 Testing manual data update...');
-    
-    // Create test data
-    const testData: StreamData = {
-      NumSubs: 3,
-      Subs: [
-        { Name: 'TEST-AUV-001', Battery: 0.95, TravelPlan: [[0, 0, 0, 0]] },
-        { Name: 'TEST-AUV-002', Battery: 0.82, TravelPlan: [[1, 1, 1, 1]] },
-        { Name: 'TEST-AUV-003', Battery: 0.67, TravelPlan: [[2, 2, 2, 2]] }
-      ]
-    };
-    
-    // Manually process the test data
-    this.isLoading = false;
-    this.fleetStats.totalVehicles = testData.NumSubs;
-    this.fleetStats.activeMissions = testData.Subs.length;
-    
-    const avgBattery = testData.Subs.reduce((sum, sub) => sum + sub.Battery, 0) / testData.Subs.length;
-    this.fleetStats.batteryStatus = `${Math.round(avgBattery)}%`;
-    
-    this.missions = testData.Subs.map((sub, index) => ({
-      id: sub.Name,
-      maintenanceStatus: this.getMaintenanceStatus(sub.Battery),
-      battery: Math.round(sub.Battery * 100),
-      current_role: this.getCurrentRole(sub, index)
-    }));
-    
-    this.updateNavigationPoints(testData.Subs);
-    this.cdr.detectChanges();
-    
-    console.log('✅ Manual test update complete!');
-  }
-
-  // Try alternative EventSource connection
-  tryEventSource() {
-    console.log('🔄 Trying EventSource connection method...');
-    this.streamService.connectWithEventSource();
   }
 }
