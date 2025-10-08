@@ -10,10 +10,10 @@ import java.time.Instant;
 @RestController
 public class Pulse {
 
-    @RequestMapping("/")
-    public String home() {
-        return "Heartbeat";
-    }
+//    @RequestMapping("/")
+//    public String home() {
+//        return "Heartbeat";
+//    }
 
     @RequestMapping("/time")
     public String time() {
