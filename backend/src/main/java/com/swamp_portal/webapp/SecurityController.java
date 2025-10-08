@@ -20,30 +20,55 @@ public class SecurityController {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // API-style app; CSRF off is fine here
                 .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())   // will be a no-op in prod if no CORS bean
+
+                // Enable CORS (uses the bean below)
+                .cors(Customizer.withDefaults())
+
                 .authorizeHttpRequests(auth -> auth
-                        // allow static SPA assets + shell
+                        // ===== allow the SPA shell & static assets =====
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/", "/index.html", "/favicon.ico",
-                                "/*.js", "/*.css", "/assets/**", "/3rdpartylicenses.txt").permitAll()
-                        // open auth endpoints (if you have them)
+                        .requestMatchers(HttpMethod.GET,
+                                "/",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/*.js",
+                                "/*.css",
+                                "/assets/**",
+                                "/3rdpartylicenses.txt"
+                        ).permitAll()
+
+                        // ===== open auth endpoints if you have any like /api/auth/** =====
                         .requestMatchers("/api/auth/**").permitAll()
-                        // keep everything public for hackathon
+
+                        // ===== for hackathon simplicity, leave everything else open =====
                         .anyRequest().permitAll()
                 );
+
         return http.build();
     }
 
-    // ---- CORS for local dev only (so ng serve can hit the backend) ----
+    /**
+     * CORS for both prod and local so <script type="module" crossorigin>
+     * requests for main-*.js / polyfills-*.js aren't blocked.
+     *
+     * If you want to tighten later, replace AllowedOriginPatterns("*")
+     * with explicit origins (e.g., your App Runner/custom domain).
+     */
     @Bean
-    @Profile("local")
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+
+        // Permissive: allow any origin. (Do not use credentials with "*")
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowCredentials(false);
+
+        // Allow common methods/headers
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
-        config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("*"));
+
+        // Helpful for streaming/long responses (optional)
         config.setExposedHeaders(List.of("Content-Type","Cache-Control","Connection","Transfer-Encoding"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
