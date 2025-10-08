@@ -23,15 +23,15 @@ export interface TableColumn {
             <tr class="border-b border-slate-700">
               <th 
                 *ngFor="let column of columns" 
-                class="text-left py-3 text-slate-400 font-medium"
+                class="text-left py-3 px-4 text-slate-400 font-medium"
               >
                 {{ column.label }}
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of data" class="border-b border-slate-700/50">
-              <td *ngFor="let column of columns" class="py-3">
+            <tr *ngFor="let row of data" class="border-b border-slate-700/50 hover:bg-slate-700/30 transition-colors duration-200 cursor-pointer">
+              <td *ngFor="let column of columns" class="py-3 px-4">
                 <!-- Text type -->
                 <span *ngIf="!column.type || column.type === 'text'" [class.font-medium]="columns[0].key === column.key">
                   {{ row[column.key] }}
