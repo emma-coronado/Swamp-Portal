@@ -1,0 +1,53 @@
+name: Build & Push to ECR (single service)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - "Dockerfile"
+      - ".github/workflows/ecr.yml"
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-session-token:     ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build image
+        run: |
+          REGISTRY="${{ steps.ecr.outputs.registry }}"
+          IMAGE="$REGISTRY/${{ env.ECR_REPOSITORY }}"
+          echo "Building $IMAGE:latest"
+          docker build -t "$IMAGE:latest" .
+
+      - name: Push :latest and :gitsha tags
+        run: |
+          REGISTRY="${{ steps.ecr.outputs.registry }}"
+          IMAGE="$REGISTRY/${{ env.ECR_REPOSITORY }}"
+          GIT_SHA="${{ github.sha }}"
+          docker tag "$IMAGE:latest" "$IMAGE:$GIT_SHA"
+          docker push "$IMAGE:latest"
+          docker push "$IMAGE:$GIT_SHA"
