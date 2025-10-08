@@ -39,18 +39,47 @@ export class AuthService {
     // Disconnect stream before logout
     this.streamService.disconnect();
     
+    // Clear login status
+    this.setLoginStatus(false);
+    
     // Call the logout endpoint to clear the session cookie
     return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true });
   }
 
-  // For cookie-based authentication, we can't directly check the cookie from JS
-  // We'll need to make a request to check authentication status
+  // Check authentication status by making a request to the server
   checkAuthStatus(): Observable<boolean> {
-    // This would require an endpoint like /api/auth/status
-    // For now, we'll assume the user is authenticated if they successfully logged in
     return new Observable(observer => {
-      observer.next(true);
-      observer.complete();
+      // Try to make a request to a protected endpoint to verify authentication
+      this.http.get(`${this.apiUrl}/auth/status`, { withCredentials: true })
+        .subscribe({
+          next: (response) => {
+            // If the request succeeds, user is authenticated
+            observer.next(true);
+            observer.complete();
+          },
+          error: (error) => {
+            // If the request fails (401, 403), user is not authenticated
+            if (error.status === 401 || error.status === 403) {
+              observer.next(false);
+            } else {
+              // For other errors, assume not authenticated to be safe
+              observer.next(false);
+            }
+            observer.complete();
+          }
+        });
     });
+  }
+
+  // Simple method to check if user is likely authenticated based on recent login
+  private isRecentLogin = false;
+
+  setLoginStatus(isLoggedIn: boolean) {
+    this.isRecentLogin = isLoggedIn;
+  }
+
+  // Quick check without making HTTP request (for immediate use)
+  isLoggedIn(): boolean {
+    return this.isRecentLogin;
   }
 }

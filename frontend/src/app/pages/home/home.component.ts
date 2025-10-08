@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { AuvFleetComponent } from '../../components/dashboards/auv-fleet/auv-fleet.component';
 import { DroneFleetComponent } from '../../components/dashboards/drone-fleet/drone-fleet.component';
 import { AutonomousFleetComponent } from '../../components/dashboards/autonomous-fleet/autonomous-fleet.component';
@@ -36,7 +37,7 @@ export class HomeComponent {
     }
   };
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     console.log('Home component loaded');
   }
 
@@ -58,8 +59,17 @@ export class HomeComponent {
   }
 
   logout() {
-    console.log('Logging out...');
-    // Clear any stored user data here when you implement authentication
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        // Successfully logged out on server
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Logout error:', error);
+        // Even if server logout fails, clear client state and redirect
+        this.authService.setLoginStatus(false);
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }

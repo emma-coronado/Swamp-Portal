@@ -76,7 +76,8 @@ export class LoginComponent {
           
           // Backend returns { "status": "ok" } on successful login
           if (response && response.status === 'ok') {
-            console.log('Login successful! Starting stream connection...');
+            // Set login status
+            this.authService.setLoginStatus(true);
             
             this.router.navigate(['/home']).then(() => {
               // Start stream connection after navigation completes
