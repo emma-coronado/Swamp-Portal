@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService, LoginRequest } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,10 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
+  isLoading = false;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -51,16 +54,40 @@ export class LoginComponent {
 
   onLogin() {
     this.submitted = true;
+    this.errorMessage = '';
     
     if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
-      console.log('Login attempt:', username, password);
+      this.isLoading = true;
+      const credentials: LoginRequest = {
+        username: this.loginForm.value.username,
+        password: this.loginForm.value.password
+      };
       
-      // Simulate successful login and redirect to home
-      console.log('Login successful! Redirecting to home...');
-      this.router.navigate(['/home']);
-      
-      // TODO: Replace this with actual authentication logic when backend is ready
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          console.log('Login response:', response);
+          
+          // Backend returns { "status": "ok" } on successful login
+          if (response && response.status === 'ok') {
+            console.log('Login successful! Redirecting to home...');
+            this.router.navigate(['/home']);
+          } else {
+            this.errorMessage = 'Login failed. Please check your credentials.';
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('Login error:', error);
+          if (error.status === 401) {
+            this.errorMessage = 'Invalid username or password.';
+          } else if (error.status === 0) {
+            this.errorMessage = 'Unable to connect to the server. Please check if the server is running.';
+          } else {
+            this.errorMessage = error.error?.message || 'An error occurred during login. Please try again.';
+          }
+        }
+      });
     } else {
       // Mark all fields as touched to show validation errors
       this.markFormGroupTouched();
