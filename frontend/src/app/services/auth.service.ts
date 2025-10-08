@@ -17,10 +17,26 @@ export interface LoginResponse {
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api';
+  
+  // DEVELOPMENT FEATURE: Allows login with admin/admin without backend API calls
+  // TODO: Remove this dev workaround in production
 
   constructor(private http: HttpClient, private streamService: StreamService) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
+    // Development workaround: Allow admin/admin login without API call
+    if (credentials.username === 'admin' && credentials.password === 'admin') {
+      console.log('Using development login workaround for admin user');
+      this.setDevLoginStatus(true);
+      return new Observable(observer => {
+        // Simulate successful login response
+        setTimeout(() => {
+          observer.next({ status: 'ok' });
+          observer.complete();
+        }, 500); // Small delay to simulate network request
+      });
+    }
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -39,8 +55,20 @@ export class AuthService {
     // Disconnect stream before logout
     this.streamService.disconnect();
     
+    // Check if using dev login before clearing the status
+    const wasDevLogin = this.isDevLoginActive;
+    
     // Clear login status
     this.setLoginStatus(false);
+    this.setDevLoginStatus(false);
+    
+    // If using dev login, don't call the API
+    if (wasDevLogin) {
+      return new Observable(observer => {
+        observer.next({});
+        observer.complete();
+      });
+    }
     
     // Call the logout endpoint to clear the session cookie
     return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true });
@@ -49,6 +77,13 @@ export class AuthService {
   // Check authentication status by making a request to the server
   checkAuthStatus(): Observable<boolean> {
     return new Observable(observer => {
+      // If using development login, skip server check
+      if (this.isDevLoginActive) {
+        observer.next(true);
+        observer.complete();
+        return;
+      }
+
       // Try to make a request to a protected endpoint to verify authentication
       this.http.get(`${this.apiUrl}/auth/status`, { withCredentials: true })
         .subscribe({
@@ -73,9 +108,14 @@ export class AuthService {
 
   // Simple method to check if user is likely authenticated based on recent login
   private isRecentLogin = false;
+  private isDevLoginActive = false;
 
   setLoginStatus(isLoggedIn: boolean) {
     this.isRecentLogin = isLoggedIn;
+  }
+
+  private setDevLoginStatus(isActive: boolean) {
+    this.isDevLoginActive = isActive;
   }
 
   // Quick check without making HTTP request (for immediate use)
