@@ -1,6 +1,6 @@
 # Swamp-Portal
 
-UI for https://github.com/sskonda/AWS-Vanderbilt-hackathon/tree/main
+UI for https://github.com/sskonda/AWS-Vanderbilt-hackathon/ and collaborative dashboard for ASW Mission Autonomy Hackathon teams.
 
 ### Running
 #### General

@@ -1,0 +1,37 @@
+/* One Component Styles */
+.one-theme {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(15, 15, 15, 0.9) 100%);
+}
+
+.matrix-text {
+  animation: matrix-flow 10s linear infinite;
+}
+
+@keyframes matrix-flow {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.2; }
+}
+
+.one-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.one-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  z-index: -1;
+  border-radius: inherit;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
