@@ -21,9 +21,11 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
   isLoading = true;
   connectionStatus: 'disconnected' | 'connecting' | 'connected' | 'error' = 'disconnected';
   
+  initButton = 'Initiate';
+
   fleetStats = {
     totalVehicles: 0, // updated dynamically
-    activeMissions: 0,
+    eventNum: 0,
     depthRange: '0-6000m',
     batteryStatus: 'Loading...'
   };
@@ -91,7 +93,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
         
         // Update fleet statistics
         this.fleetStats.totalVehicles = data.num_subs;
-        this.fleetStats.activeMissions = data.Subs.length;
+        this.fleetStats.eventNum = data.Events.length;
 
         this.fleetStats.batteryStatus = `50%`; // placeholder
         
