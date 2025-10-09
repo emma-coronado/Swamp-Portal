@@ -52,36 +52,46 @@
     </app-status-box>
 
     <app-status-box
-      title="Active Missions"
-      [mainValue]="isLoading ? 'Loading...' : fleetStats.activeMissions.toString()"
+      title="Number of Events"
+      [mainValue]="isLoading ? 'Loading...' : fleetStats.eventNum.toString()"
       subtitle="Deep Sea Operations"
       [showIndicator]="!isLoading"
       indicatorColor="blue">
     </app-status-box>
 
     <app-status-box
-      title="Max Depth"
-      [mainValue]="fleetStats.depthRange"
-      subtitle="Operating Range"
+      title="Shelter In Place"
+      [mainValue]= 'initButton'
+      subtitle="Harsh Weather Protocol"
       [showIndicator]="!isLoading"
-      indicatorColor="blue">
+      indicatorColor="red">
     </app-status-box>
 
     <app-status-box
-      title="Avg Battery"
-      [mainValue]="fleetStats.batteryStatus"
-      subtitle="Fleet Condition"
+      title="Recall"
+      [mainValue]="initButton"
+      subtitle="Recall Fleet"
       [showIndicator]="!isLoading"
-      [indicatorColor]="isLoading ? 'gray' : 'green'">
+      [indicatorColor]="isLoading ? 'gray' : 'red'">
     </app-status-box>
   </div>
 
   <!-- Mission Status Table -->
-  <div [class.opacity-50]="isLoading">
+  <!-- <div [class.opacity-50]="isLoading">
     <app-data-table
       [title]="isLoading ? 'Active Missions (Loading...)' : 'Active Missions'"
       [columns]="missionsTableColumns"
       [data]="missions">
+    </app-data-table>
+  </div> -->
+
+  <!-- Detailed Mission Accordion with Nautical Maps -->
+  <div [class.opacity-50]="isLoading">
+    <app-data-table
+      title="Detailed Mission Status with Navigation Charts"
+      [columns]="accordionTableColumns"
+      [data]="accordionTableData"
+      [accordionMode]="true">
     </app-data-table>
   </div>
 

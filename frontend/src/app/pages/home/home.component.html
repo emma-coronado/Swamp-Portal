@@ -65,14 +65,15 @@
     <div class="p-6">
       <!-- Dynamic Fleet Component Display -->
       <div [ngSwitch]="currentDashboard">
+        <app-Aardvark *ngSwitchCase="'aardvark'"></app-Aardvark>
         <app-auv-fleet *ngSwitchCase="'auv'"></app-auv-fleet>
         <app-AutoGators *ngSwitchCase="'autogators'"></app-AutoGators>
-        <app-Aardvark *ngSwitchCase="'aardvark'"></app-Aardvark>
-        <app-GoblinGang *ngSwitchCase="'goblingang'"></app-GoblinGang>
         <app-Clankers *ngSwitchCase="'clankers'"></app-Clankers>
-        <app-TheHivemind *ngSwitchCase="'thehivemind'"></app-TheHivemind>
-        <app-Prober *ngSwitchCase="'prober'"></app-Prober>
+        <app-GoblinGang *ngSwitchCase="'goblingang'"></app-GoblinGang>
+        <app-Jet2Holiday *ngSwitchCase="'jet2holiday'"></app-Jet2Holiday>
         <app-One *ngSwitchCase="'one'"></app-One>
+        <app-Prober *ngSwitchCase="'prober'"></app-Prober>
+        <app-TheHivemind *ngSwitchCase="'thehivemind'"></app-TheHivemind>
       </div>
 
     </div>
