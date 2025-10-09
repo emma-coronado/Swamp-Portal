@@ -16,8 +16,8 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api';
-  
+  private apiUrl = '/api';
+
   // DEVELOPMENT FEATURE: Allows login with admin/admin without backend API calls
   // TODO: Remove this dev workaround in production
 
@@ -42,9 +42,9 @@ export class AuthService {
     });
 
     // Include credentials to handle HTTP-only cookies
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials, { 
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials, {
       headers,
-      withCredentials: true 
+      withCredentials: true
     });
   }
 
@@ -54,14 +54,14 @@ export class AuthService {
   logout(): Observable<any> {
     // Disconnect stream before logout
     this.streamService.disconnect();
-    
+
     // Check if using dev login before clearing the status
     const wasDevLogin = this.isDevLoginActive;
-    
+
     // Clear login status
     this.setLoginStatus(false);
     this.setDevLoginStatus(false);
-    
+
     // If using dev login, don't call the API
     if (wasDevLogin) {
       return new Observable(observer => {
@@ -69,7 +69,7 @@ export class AuthService {
         observer.complete();
       });
     }
-    
+
     // Call the logout endpoint to clear the session cookie
     return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true });
   }

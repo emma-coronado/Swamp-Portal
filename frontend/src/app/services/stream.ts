@@ -17,7 +17,7 @@ export class StreamService {
   private abortController?: AbortController;
   private streamDataSubject = new BehaviorSubject<StreamData | null>(null);
   private connectionStateSubject = new BehaviorSubject<'disconnected' | 'connecting' | 'connected' | 'error'>('disconnected');
-  
+
   streamData$ = this.streamDataSubject.asObservable();
   connectionState$ = this.connectionStateSubject.asObservable();
 
@@ -30,7 +30,7 @@ export class StreamService {
     this.connectionStateSubject.next('connecting');
 
     try {
-      const response = await fetch('http://localhost:8080/api/stream', {
+      const response = await fetch('/api/stream', {
         method: 'GET',
         credentials: 'include', // Include cookies for authentication
         signal: this.abortController.signal,
@@ -53,14 +53,14 @@ export class StreamService {
 
       while (true) {
         const { done, value } = await reader.read();
-        
+
         if (done) {
           break;
         }
 
         const chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
-        
+
         // Process complete lines/events
         const lines = buffer.split('\n');
         buffer = lines.pop() || ''; // Keep incomplete line in buffer
@@ -92,7 +92,7 @@ export class StreamService {
     // Handle SSE data events
     if (line.startsWith('data:')) {
       const jsonData = line.substring(5); // Remove "data:" prefix
-      
+
       this.zone.run(() => {
         try {
           if (jsonData.trim() === 'null' || jsonData.trim() === '' || jsonData.trim() === 'undefined') {
