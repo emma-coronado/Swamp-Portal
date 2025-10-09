@@ -77,11 +77,21 @@
   </div>
 
   <!-- Mission Status Table -->
-  <div [class.opacity-50]="isLoading">
+  <!-- <div [class.opacity-50]="isLoading">
     <app-data-table
       [title]="isLoading ? 'Active Missions (Loading...)' : 'Active Missions'"
       [columns]="missionsTableColumns"
       [data]="missions">
+    </app-data-table>
+  </div> -->
+
+  <!-- Detailed Mission Accordion with Nautical Maps -->
+  <div [class.opacity-50]="isLoading">
+    <app-data-table
+      title="Detailed Mission Status with Navigation Charts"
+      [columns]="accordionTableColumns"
+      [data]="accordionTableData"
+      [accordionMode]="true">
     </app-data-table>
   </div>
 
