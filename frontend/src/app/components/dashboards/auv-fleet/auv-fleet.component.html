@@ -64,7 +64,10 @@
       [mainValue]= 'initButton'
       subtitle="Harsh Weather Protocol"
       [showIndicator]="!isLoading"
-      indicatorColor="red">
+      indicatorColor="red"
+      [isButton]="true"
+      [isDisabled]="connectionStatus !== 'connected'"
+      buttonAction="Shelter In Place protocol activated! All AUV units will seek immediate shelter due to harsh weather conditions.">
     </app-status-box>
 
     <app-status-box
@@ -72,7 +75,10 @@
       [mainValue]="initButton"
       subtitle="Recall Fleet"
       [showIndicator]="!isLoading"
-      [indicatorColor]="isLoading ? 'gray' : 'red'">
+      [indicatorColor]="isLoading ? 'gray' : 'red'"
+      [isButton]="true"
+      [isDisabled]="connectionStatus !== 'connected'"
+      buttonAction="Fleet recall initiated! All AUV units are returning to base immediately.">
     </app-status-box>
   </div>
 
