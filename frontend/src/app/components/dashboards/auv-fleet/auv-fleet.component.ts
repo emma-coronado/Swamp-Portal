@@ -30,39 +30,29 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
 
   // Placeholder missions data for initial display
   private placeholderMissions = [
-    { id: 'Loading...', maintenanceStatus: 'Loading...', battery: 0, current_role: 'Loading...' }
+    { id: 'Loading...', current_role: 'Loading...', new_reports: 0, avg_deviation: 0}
   ];
 
   // Dynamic missions data from SSE stream
   missions = this.placeholderMissions;
 
   missionsTableColumns: TableColumn[] = [
-    { key: 'id', label: 'Vehicle ID', type: 'text' },
-    { 
-      key: 'maintenanceStatus', 
-      label: 'Maintenance Status', 
-      type: 'badge',
-      badgeColors: {
-        'Working': 'bg-green-600/20 text-green-400',
-        'Due for Maintenance': 'bg-yellow-600/20 text-yellow-400',
-        'Failing': 'bg-red-600/20 text-red-400'
-      }
-    },
-    { 
-      key: 'battery', 
-      label: 'Battery', 
-      type: 'progress',
-      progressColors: {
-        high: 'bg-green-500',
-        medium: 'bg-yellow-500',
-        low: 'bg-red-500'
-      }
-    },
+    { key: 'id', label: 'Name', type: 'text' },
     {
       key: 'current_role',
       label: 'Current Role',
       type: 'highlight',
       highlightColor: 'text-cyan-400'
+    },
+    {
+      key: 'new_reports',
+      label: 'New Reports',
+      type: 'text'
+    },
+    { 
+      key: 'avg_deviation', 
+      label: 'Avg Path Deviation', 
+      type: 'text'
     }
   ];
 
@@ -100,19 +90,17 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         
         // Update fleet statistics
-        this.fleetStats.totalVehicles = data.NumSubs;
+        this.fleetStats.totalVehicles = data.num_subs;
         this.fleetStats.activeMissions = data.Subs.length;
-        
-        // Calculate average battery status (convert from 0.1 to 10% format)
-        const avgBattery = data.Subs.reduce((sum, sub) => sum + (sub.Battery * 100), 0) / data.Subs.length;
-        this.fleetStats.batteryStatus = `${Math.round(avgBattery)}%`;
+
+        this.fleetStats.batteryStatus = `50%`; // placeholder
         
         // Transform SSE data to match component structure
         this.missions = data.Subs.map((sub, index) => ({
-          id: sub.Name || `AUV-${String(index + 1).padStart(3, '0')}`,
-          maintenanceStatus: this.getMaintenanceStatus(sub.Battery),
-          battery: Math.round(sub.Battery * 100), // Convert 0.1 to 10% format
-          current_role: this.getCurrentRole(sub, index)
+          id: sub.name || `AUV-${String(index + 1).padStart(3, '0')}`,
+          current_role: sub.role,
+          new_reports: sub.new_reports,
+          avg_deviation: sub.avg_deviation
         }));
         
         // Update navigation points based on travel plans
