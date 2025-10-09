@@ -19,12 +19,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @RestController
 @RequestMapping("/api")
 public class StreamController {
+    private Object LastJSON = "{}";
     private final Set<SseEmitter> clients = new CopyOnWriteArraySet<>();
     private final SessionService sessions;
     private final AdminGuard admin;
     public StreamController(SessionService sessions, AdminGuard admin) {
         this.sessions = sessions;
         this.admin = admin;
+        LastJSON = "";
     }
 
     /**
@@ -57,6 +59,7 @@ public class StreamController {
         } catch (IOException err) {
             // do nothing :)
         }
+        broadcast(LastJSON);
         return emitter;
     }
 
@@ -80,6 +83,7 @@ public class StreamController {
     @PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void send(@RequestBody Object json, HttpServletRequest req) {
         admin.requireAdmin(req);
+        LastJSON = json;
         broadcast(json);
     }
 }
