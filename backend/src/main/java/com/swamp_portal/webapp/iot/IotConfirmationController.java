@@ -1,5 +1,9 @@
 package com.swamp_portal.webapp.iot;
 
+import com.swamp_portal.webapp.controllers.StreamController;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -17,11 +21,14 @@ public class IotConfirmationController {
     private final IotClient iot;
     private final RestTemplate restTemplate = new RestTemplate();
 
+    @Autowired
+    StreamController streamController;
+
     public IotConfirmationController(@Value("us-east-1") String region) {
         this.iot = IotClient.builder().region(Region.of(region)).build();
     }
 
-    @PostMapping("/confirm")
+    @PostMapping("")
     public ResponseEntity<String> confirmDestination(@RequestBody ConfirmPayload body) {
         try {
             // Prefer enableUrl confirmation if provided
@@ -52,5 +59,10 @@ public class IotConfirmationController {
             return ResponseEntity.internalServerError()
                     .body("Error confirming destination: " + e.getMessage());
         }
+    }
+
+    @PostMapping(value = "/test", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void send(@RequestBody Object json, HttpServletRequest req) {
+        streamController.broadcast(json);
     }
 }
