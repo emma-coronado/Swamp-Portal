@@ -95,14 +95,22 @@
     </app-data-table>
   </div>
 
-  <!-- Navigation Chart Section -->
+  <!-- System Events Panel -->
   <div [class.opacity-50]="isLoading">
+    <app-events-panel
+      title="Recent System Events"
+      [events]="events">
+    </app-events-panel>
+  </div>
+
+  <!-- Navigation Chart Section -->
+  <!-- <div [class.opacity-50]="isLoading">
     <app-nautical-map 
       [points]="navigationPoints" 
       [width]="800" 
       [height]="500"
       [title]="isLoading ? 'Mission Navigation Chart (Loading...)' : 'Mission Navigation Chart'">
     </app-nautical-map>
-  </div>
+  </div> -->
 
 </main>

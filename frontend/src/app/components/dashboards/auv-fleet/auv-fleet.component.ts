@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { StatusBoxComponent } from '../components/status-box.component';
 import { DataTableComponent, TableColumn, TableRow } from '../components/data-table.component';
+import { EventsPanelComponent, EventItem } from '../components/events-panel.component';
 import { NauticalMapComponent, MapPoint } from '../components/nautical-map/nautical-map.component';
 import { StreamService, StreamData } from '../../../services/stream';
 
@@ -11,7 +12,7 @@ import { StreamService, StreamData } from '../../../services/stream';
   selector: 'app-auv-fleet',
   templateUrl: './auv-fleet.component.html',
   styleUrls: ['./auv-fleet.component.css'],
-  imports: [CommonModule, StatusBoxComponent, DataTableComponent, NauticalMapComponent]
+  imports: [CommonModule, StatusBoxComponent, DataTableComponent, EventsPanelComponent, NauticalMapComponent]
 })
 export class AuvFleetComponent implements OnInit, OnDestroy {
   private streamSubscription?: Subscription;
@@ -87,6 +88,9 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
   // Dynamic accordion missions data from SSE stream (same as regular missions but with nautical maps)
   accordionTableData: TableRow[] = this.placeholderAccordionMissions;
 
+  // Events data from the stream
+  events: EventItem[] = [];
+
   // Sample navigation data for the nautical map
   navigationPoints: MapPoint[] = [
     { x: 10, y: 20, label: 'Start Port', type: 'port' },
@@ -125,6 +129,9 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
         this.fleetStats.eventNum = data.Events.length;
 
         this.fleetStats.batteryStatus = `50%`; // placeholder
+
+        // Update events data
+        this.events = data.Events || [];
         
         // Transform SSE data to match component structure
         this.missions = data.Subs.map((sub, index) => ({
