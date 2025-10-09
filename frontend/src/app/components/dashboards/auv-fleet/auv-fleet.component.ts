@@ -152,9 +152,9 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
     // Simple role assignment based on battery and index
     // You can customize this logic based on your actual data structure
     if (sub.Battery > 90) return 'MASTER';
-    if (sub.Battery > 70) return 'PATROL';
+    if (sub.Battery > 70) return 'SLAVE';
     if (sub.Battery > 50) return 'BATTERY_TANKER';
-    return 'SLAVE';
+    return 'PATROL';
   }
 
   private updateNavigationPoints(subs: any[]) {

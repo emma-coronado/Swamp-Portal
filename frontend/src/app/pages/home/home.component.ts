@@ -10,6 +10,7 @@ import { ClankersComponent } from '../../components/dashboards/Clankers/Clankers
 import { TheHivemindComponent } from '../../components/dashboards/TheHivemind/TheHivemind.component';
 import { ProberComponent } from '../../components/dashboards/Prober/Prober.component';
 import { OneComponent } from '../../components/dashboards/One/One.component';
+import { Jet2HolidayComponent } from '../../components/dashboards/Jet2Holiday/Jet2Holiday.component';
 
 // Interface for dashboard configuration
 interface DashboardItem {
@@ -25,7 +26,7 @@ interface DashboardItem {
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  imports: [CommonModule, AuvFleetComponent, AutoGatorsComponent, AardvarkComponent, GoblinGangComponent, ClankersComponent, TheHivemindComponent, ProberComponent, OneComponent]
+  imports: [CommonModule, AuvFleetComponent, AutoGatorsComponent, AardvarkComponent, GoblinGangComponent, ClankersComponent, TheHivemindComponent, ProberComponent, OneComponent, Jet2HolidayComponent]
 })
 export class HomeComponent {
   currentUser = 'Admin'; // Placeholder for now
@@ -64,6 +65,14 @@ export class HomeComponent {
       componentSelector: 'app-GoblinGang',
       title: 'GoblinGang Dashboard',
       icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+    },
+    {
+      id: 'jet2holiday',
+      displayName: 'Project Name',
+      subtitle: 'Jet2Holiday',
+      componentSelector: 'app-Jet2Holiday',
+      title: 'Jet2Holiday Dashboard',
+      icon: 'M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'
     },
     {
       id: 'clankers',
