@@ -8,11 +8,11 @@
 
 .stat-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 10px 25px rgba(25, 129, 122, 0.1);
 }
 
 .stat-icon {
-    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    background: linear-gradient(135deg, #19817a 0%, #0f6b65 100%);
     border-radius: 12px;
     width: 48px;
     height: 48px;
@@ -24,20 +24,20 @@
 
 /* Fleet Icon */
 .fleet-icon {
-    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    background: linear-gradient(135deg, #19817a 0%, #0f6b65 100%);
 }
 
 /* Sidebar Styles */
 .accent-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #19817a 0%, #0f6b65 100%);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #19817a 0%, #0f6b65 100%);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, #0f6b65 0%, #0d5651 100%);
 }
 
 /* Dashboard Navigation */
@@ -59,11 +59,11 @@
 .action-btn:hover {
     background: rgba(30, 41, 59, 0.8);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 4px 12px rgba(25, 129, 122, 0.1);
 }
 
 .action-icon {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #19817a 0%, #0f6b65 100%);
     border-radius: 8px;
     width: 40px;
     height: 40px;

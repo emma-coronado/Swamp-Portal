@@ -118,7 +118,7 @@
         <button
           type="submit"
           [disabled]="loginForm.invalid || isLoading"
-          [class]="'w-full py-3 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center ' + 
+          [class]="'w-full py-3 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#19817a] focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200 flex items-center justify-center ' + 
                    (loginForm.invalid || isLoading ? 'bg-slate-600 text-slate-400 cursor-not-allowed' : 'login-btn text-white hover:shadow-lg')"
         >
           <span *ngIf="!isLoading">Access Fleet Dashboard</span>

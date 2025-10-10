@@ -76,7 +76,7 @@ export class HomeComponent {
     },
     {
       id: 'clankers',
-      displayName: 'Project Name',
+      displayName: 'HUSH-Mesh',
       subtitle: 'Clankers',
       componentSelector: 'app-Clankers',
       title: 'Clankers Dashboard',
