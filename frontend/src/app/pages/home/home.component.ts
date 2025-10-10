@@ -56,7 +56,7 @@ export class HomeComponent {
       subtitle: 'Aardvark',
       componentSelector: 'app-Aardvark',
       title: 'Aardvark Dashboard',
-      icon: 'M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'
+      icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 8l-2 2v3l2 2-1 1-2-2H9l-2 2-1-1 2-2v-3l-2-2 1-1 2 2h3.5l2-2 1 1z'
     },
     {
       id: 'goblingang',
@@ -64,7 +64,7 @@ export class HomeComponent {
       subtitle: 'GoblinGang',
       componentSelector: 'app-GoblinGang',
       title: 'GoblinGang Dashboard',
-      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+      icon: 'M14.5 2.5c0 1.5-1 2.5-2.5 2.5S9.5 4 9.5 2.5 10.5 0 12 0s2.5 1 2.5 2.5zM6 7l2 2 2-2 2 2 2-2 2 2v2l-2 2-2-2-2 2-2-2-2 2-2-2V7l2 2zm6 5l2 2 2-2 2 2v3l-2 2-2-2-2 2-2-2v-3l2-2zm-6 0l2 2v3l-2 2-2-2v-3l2-2z'
     },
     {
       id: 'jet2holiday',
@@ -72,7 +72,7 @@ export class HomeComponent {
       subtitle: 'Jet2Holiday',
       componentSelector: 'app-Jet2Holiday',
       title: 'Jet2Holiday Dashboard',
-      icon: 'M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'
+      icon: 'M22 12h-4l-3 8v-6h-2v6l-3-8H6l4-4h8l4 4zM2 12l2-2v8l-2-2v-4zm20-2l2 2v4l-2 2v-8zM12 2l2 2H10l2-2z'
     },
     {
       id: 'clankers',
@@ -80,7 +80,7 @@ export class HomeComponent {
       subtitle: 'Clankers',
       componentSelector: 'app-Clankers',
       title: 'Clankers Dashboard',
-      icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547A8.014 8.014 0 004 21h16a8.014 8.014 0 00-.244-5.572z'
+      icon: 'M3 6h18v2H3V6zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2zM21 4l1 1-1 1-1-1 1-1zm-3 3l1 1-1 1-1-1 1-1zm0 4l1 1-1 1-1-1 1-1zm0 4l1 1-1 1-1-1 1-1z'
     },
     {
       id: 'thehivemind',
@@ -88,7 +88,7 @@ export class HomeComponent {
       subtitle: 'The Hivemind',
       componentSelector: 'app-TheHivemind',
       title: 'The Hivemind Dashboard',
-      icon: 'M9 12a3 3 0 11-6 0 3 3 0 016 0zM21 12a3 3 0 11-6 0 3 3 0 616 0zM15 6a3 3 0 11-6 0 3 3 0 016 0zM15 18a3 3 0 11-6 0 3 3 0 616 0z'
+      icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'
     },
     {
       id: 'prober',
@@ -96,7 +96,7 @@ export class HomeComponent {
       subtitle: 'Prober',
       componentSelector: 'app-Prober',
       title: 'Prober Dashboard',
-      icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+      icon: 'M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'
     },
     {
       id: 'one',
@@ -104,7 +104,7 @@ export class HomeComponent {
       subtitle: 'One',
       componentSelector: 'app-One',
       title: 'One Dashboard',
-      icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+      icon: 'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'
     }
   ];
 
