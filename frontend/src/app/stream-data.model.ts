@@ -8,7 +8,7 @@ export interface StreamData {
             travel_plan: {
                 timestamp: number;
                 position: { x: number; y: number; z: number };
-                orientation: {x: number; y: number; z: number; w: number};
+                orientation: {w: number; x: number; y: number; z: number };
             }[];
             // travel_data: { // historic
             //     timestamp: number;

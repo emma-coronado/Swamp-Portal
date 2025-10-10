@@ -191,6 +191,19 @@
     color: white;
 }
 
+/* GitHub Button */
+.github-btn {
+    background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.github-btn:hover {
+    background: linear-gradient(135deg, #1a1e22 0%, #14171a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(36, 41, 46, 0.3);
+}
+
 /* Logout Button */
 .logout-btn {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);

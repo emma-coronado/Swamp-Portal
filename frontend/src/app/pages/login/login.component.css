@@ -103,3 +103,16 @@ body {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
 }
+
+/* GitHub Button */
+.github-btn {
+    background: linear-gradient(135deg, #24292e 0%, #1a1e22 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.github-btn:hover {
+    background: linear-gradient(135deg, #1a1e22 0%, #14171a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(36, 41, 46, 0.3);
+}
