@@ -79,4 +79,17 @@ public class ExpiringBuffer<T extends Timestamped> {
             lock.readLock().unlock();
         }
     }
+
+    public synchronized void clear() {
+        items.clear();
+    }
+
+    public synchronized void replaceAll(Collection<T> newItems) {
+        items.clear();
+        if (newItems != null && !newItems.isEmpty()) {
+            items.addAll(newItems);
+            items.sort(Comparator.comparing(Timestamped::getTimestamp));
+        }
+        purge(Instant.now());
+    }
 }

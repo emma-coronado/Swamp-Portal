@@ -2,6 +2,7 @@ package com.swamp_portal.webapp.controllers;
 
 import com.swamp_portal.webapp.AdminGuard;
 import com.swamp_portal.webapp.SessionService;
+import com.swamp_portal.webapp.data_format.Plan;
 import com.swamp_portal.webapp.data_format.Report;
 import com.swamp_portal.webapp.data_format.ReportAggregationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,6 +98,15 @@ public class StreamController {
         admin.requireAdmin(req);
         svc.ingestReport(report);
         svc.applyAvgDeviationFromReport(report);
+        LastJSON = svc.buildStreamdataWithAvg();
+        broadcast(LastJSON);
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping(value = "/iot/plan", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> publish_plan(@RequestBody Plan plan, HttpServletRequest req) {
+        admin.requireAdmin(req);
+        svc.ingestPlan(plan);
         LastJSON = svc.buildStreamdataWithAvg();
         broadcast(LastJSON);
         return ResponseEntity.accepted().build();
