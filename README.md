@@ -4,6 +4,17 @@
 
 A full-stack web application displaying real-time information from Operation Duloc alongside other Mission Autonomy Team dashboards.
 
+## ⭐ Acknowledgments 
+**Special thanks to the following teams for joining our collaborative dashboard vision:**
+* AutoGators
+* Aardvark
+* Goblin Gang
+* Jet2Holiday
+* Clankers
+* The Hivemind
+* Prober
+* One
+
 ## 🏗️ Architecture
 
 ### Technology Stack
