@@ -121,7 +121,10 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
 
     // Subscribe to live SSE data
     this.streamSubscription = this.streamService.streamData$.subscribe((data: StreamData | null) => {
+      console.log('AUV Fleet received stream data:', data);
+      
       if (data && data.Subs && data.Subs.length > 0) {
+        console.log(`Processing ${data.Subs.length} submarines:`, data.Subs.map(sub => sub.name));
         this.isLoading = false;
         
         // Update fleet statistics
@@ -210,7 +213,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
       ...subs.slice(0, 8).map((sub, index) => ({
         x: 20 + (index * 10),
         y: 30 + (index % 3) * 15,
-        label: sub.Name || `AUV-${index + 1}`,  // Changed from sub.name to sub.Name
+        label: sub.name || `AUV-${index + 1}`,  // Fixed: use sub.name (lowercase)
         type: 'vessel' as const
       })),
       { x: 85, y: 65, label: 'Research Station', type: 'port' }
@@ -220,15 +223,28 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
   private generateSubmarineMapPoints(sub: any, index: number): MapPoint[] {
     // Use actual travel plan data from the stream if available
     if (sub.travel_plan && sub.travel_plan.length > 0) {
+      console.log(`Processing travel plan for ${sub.name}, ${sub.travel_plan.length} waypoints`);
+      
       return sub.travel_plan.map((waypoint: any, wpIndex: number) => {
-        // Convert timestamp to readable time (timestamps appear to be in milliseconds already)
-        const waypointTime = new Date(waypoint.timestamp);
-        const timestamp = waypointTime.toLocaleTimeString('en-US', { 
-          hour12: false, 
-          hour: '2-digit', 
-          minute: '2-digit',
-          second: '2-digit'
-        });
+        // Convert timestamp to readable time with better error handling
+        let timestamp = 'Invalid Time';
+        try {
+          const waypointTime = new Date(waypoint.timestamp);
+          if (isNaN(waypointTime.getTime())) {
+            console.warn(`Invalid timestamp for ${sub.name} waypoint ${wpIndex}: ${waypoint.timestamp}`);
+            timestamp = `WP-${wpIndex + 1}`;
+          } else {
+            timestamp = waypointTime.toLocaleTimeString('en-US', { 
+              hour12: false, 
+              hour: '2-digit', 
+              minute: '2-digit',
+              second: '2-digit'
+            });
+          }
+        } catch (error) {
+          console.error(`Error processing timestamp for ${sub.name}:`, error);
+          timestamp = `WP-${wpIndex + 1}`;
+        }
         
         // Convert 3D coordinates to 2D map coordinates
         // Your data ranges from -25 to 100 for x, and y is mostly 0
