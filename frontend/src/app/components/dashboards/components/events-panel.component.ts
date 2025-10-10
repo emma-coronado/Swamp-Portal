@@ -66,7 +66,7 @@ export interface EventItem {
       <!-- Event Statistics -->
       <div *ngIf="events.length > 0" class="mt-4 pt-4 border-t border-slate-700 grid grid-cols-3 gap-4 text-center">
         <div>
-          <div class="text-2xl font-bold text-cyan-400">{{ events.length }}</div>
+          <div class="text-2xl font-bold text-slate-300">{{ events.length }}</div>
           <div class="text-xs text-slate-400">Total Events</div>
         </div>
         <div>
