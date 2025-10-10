@@ -142,18 +142,24 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
         }));
         
         // Transform SSE data for accordion table (same data but with nautical maps)
-        this.accordionTableData = data.Subs.map((sub, index) => ({
-          id: sub.name || `AUV-${String(index + 1).padStart(3, '0')}`,
-          current_role: sub.role,
-          new_reports: sub.new_reports,
-          avg_deviation: sub.avg_deviation,
-          // Add nautical map data for each submarine
-          mapTitle: `Navigation Chart - ${sub.name || `AUV-${String(index + 1).padStart(3, '0')}`}`,
-          mapWidth: 700,
-          mapHeight: 450,
-          mapPoints: this.generateSubmarineMapPoints(sub, index),
-          additionalInfo: this.generateSubmarineInfo(sub, index)
-        }));
+        this.accordionTableData = data.Subs.map((sub, index) => {
+          const mapPoints = this.generateSubmarineMapPoints(sub, index);
+          console.log(`Generating map points for ${sub.name}:`, mapPoints);
+          console.log(`Travel plan for ${sub.name}:`, sub.travel_plan);
+          
+          return {
+            id: sub.name || `AUV-${String(index + 1).padStart(3, '0')}`,
+            current_role: sub.role,
+            new_reports: sub.new_reports,
+            avg_deviation: sub.avg_deviation,
+            // Add nautical map data for each submarine
+            mapTitle: `Navigation Chart - ${sub.name || `AUV-${String(index + 1).padStart(3, '0')}`}`,
+            mapWidth: 700,
+            mapHeight: 450,
+            mapPoints: mapPoints,
+            additionalInfo: this.generateSubmarineInfo(sub, index)
+          };
+        });
         
         // Update navigation points based on travel plans
         this.updateNavigationPoints(data.Subs);
@@ -215,8 +221,8 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
     // Use actual travel plan data from the stream if available
     if (sub.travel_plan && sub.travel_plan.length > 0) {
       return sub.travel_plan.map((waypoint: any, wpIndex: number) => {
-        // Convert Unix timestamp to readable time
-        const waypointTime = new Date(waypoint.timestamp * 1000); // Unix timestamp in seconds to milliseconds
+        // Convert timestamp to readable time (timestamps appear to be in milliseconds already)
+        const waypointTime = new Date(waypoint.timestamp);
         const timestamp = waypointTime.toLocaleTimeString('en-US', { 
           hour12: false, 
           hour: '2-digit', 
@@ -224,10 +230,19 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
           second: '2-digit'
         });
         
-        // Convert 3D coordinates to 2D map coordinates (0-100 scale)
-        // Normalize x,y coordinates to fit in 0-100 range for the map display
-        const normalizedX = Math.max(5, Math.min(95, (waypoint.position.x + 50) % 100));
-        const normalizedY = Math.max(5, Math.min(95, (waypoint.position.y + 50) % 100));
+        // Convert 3D coordinates to 2D map coordinates
+        // Your data ranges from -25 to 100 for x, and y is mostly 0
+        // We need to transform this to a 0-100 scale for the map display
+        const minX = -25;
+        const maxX = 100;
+        const minY = -25; // Adding some Y range even though your data shows mostly 0
+        const maxY = 25;
+        
+        // Normalize coordinates to 10-90 range (leaving 10% padding on each side)
+        const normalizedX = Math.max(10, Math.min(90, 
+          10 + ((waypoint.position.x - minX) / (maxX - minX)) * 80));
+        const normalizedY = Math.max(10, Math.min(90, 
+          10 + ((waypoint.position.y - minY) / (maxY - minY)) * 80));
         
         return {
           x: normalizedX,
@@ -283,7 +298,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
     if (sub.travel_plan && sub.travel_plan.length > 0) {
       waypointCount = sub.travel_plan.length;
       const lastWaypoint = sub.travel_plan[sub.travel_plan.length - 1];
-      const lastTime = new Date(lastWaypoint.timestamp * 1000); // Unix timestamp to milliseconds
+      const lastTime = new Date(lastWaypoint.timestamp); // Timestamp is already in milliseconds
       lastWaypointTime = lastTime.toLocaleTimeString('en-US', { 
         hour12: false, 
         hour: '2-digit', 
@@ -292,7 +307,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
       });
       
       const firstWaypoint = sub.travel_plan[0];
-      const firstTime = new Date(firstWaypoint.timestamp * 1000); // Unix timestamp to milliseconds
+      const firstTime = new Date(firstWaypoint.timestamp); // Timestamp is already in milliseconds
       const startTimeStr = firstTime.toLocaleTimeString('en-US', { 
         hour12: false, 
         hour: '2-digit', 
