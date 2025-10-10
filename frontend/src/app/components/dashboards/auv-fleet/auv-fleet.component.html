@@ -29,7 +29,7 @@
       <!-- Retry button for connection issues -->
       <button *ngIf="connectionStatus === 'error' || connectionStatus === 'disconnected'"
               (click)="retryConnection()"
-              class="ml-auto px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors">
+              class="ml-auto px-3 py-1 text-xs bg-[#19817a] hover:bg-[#0f6b65] text-white rounded-md transition-colors">
         Retry Connection
       </button>
     </div>
@@ -37,7 +37,7 @@
 
   <!-- Loading Indicator -->
   <div *ngIf="isLoading" class="flex items-center justify-center py-8">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#19817a]"></div>
     <span class="ml-3 text-gray-400">Waiting for data...</span>
   </div>
 
@@ -64,7 +64,10 @@
       [mainValue]= 'initButton'
       subtitle="Harsh Weather Protocol"
       [showIndicator]="!isLoading"
-      indicatorColor="red">
+      indicatorColor="red"
+      [isButton]="true"
+      [isDisabled]="connectionStatus !== 'connected'"
+      buttonAction="Shelter In Place protocol activated! All AUV units will seek immediate shelter due to harsh weather conditions.">
     </app-status-box>
 
     <app-status-box
@@ -72,7 +75,10 @@
       [mainValue]="initButton"
       subtitle="Recall Fleet"
       [showIndicator]="!isLoading"
-      [indicatorColor]="isLoading ? 'gray' : 'red'">
+      [indicatorColor]="isLoading ? 'gray' : 'red'"
+      [isButton]="true"
+      [isDisabled]="connectionStatus !== 'connected'"
+      buttonAction="Fleet recall initiated! All AUV units are returning to base immediately.">
     </app-status-box>
   </div>
 

@@ -45,7 +45,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
       key: 'current_role',
       label: 'Current Role',
       type: 'highlight',
-      highlightColor: 'text-cyan-400'
+      highlightColor: 'text-[#19817a]'
     },
     {
       key: 'new_reports',
@@ -66,7 +66,7 @@ export class AuvFleetComponent implements OnInit, OnDestroy {
       key: 'current_role',
       label: 'Current Role',
       type: 'highlight',
-      highlightColor: 'text-cyan-400'
+      highlightColor: 'text-[#19817a]'
     },
     {
       key: 'new_reports',
