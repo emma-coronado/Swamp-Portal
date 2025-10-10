@@ -2,14 +2,15 @@ package com.swamp_portal.webapp.controllers;
 
 import com.swamp_portal.webapp.AdminGuard;
 import com.swamp_portal.webapp.SessionService;
+import com.swamp_portal.webapp.data_format.Report;
+import com.swamp_portal.webapp.data_format.ReportAggregationService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import org.springframework.util.MimeType;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -17,16 +18,16 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 @RestController
-@RequestMapping("/api")
 public class StreamController {
     private Object LastJSON = "{}";
     private final Set<SseEmitter> clients = new CopyOnWriteArraySet<>();
     private final SessionService sessions;
     private final AdminGuard admin;
-    public StreamController(SessionService sessions, AdminGuard admin) {
+    public StreamController(SessionService sessions, AdminGuard admin, ReportAggregationService reportAggregationService) {
         this.sessions = sessions;
         this.admin = admin;
         LastJSON = "";
+        this.svc = reportAggregationService;
     }
 
     /**
@@ -34,7 +35,7 @@ public class StreamController {
      * @param lastEventID
      * @return
      */
-    @GetMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(value = "/api/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public SseEmitter stream(@RequestHeader(value="Last-Event-ID", required=false) String lastEventID, HttpServletRequest req) {
 
         String user = sessions.getUser(req);
@@ -80,10 +81,25 @@ public class StreamController {
         });
     }
 
-    @PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/send", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void send(@RequestBody Object json, HttpServletRequest req) {
         admin.requireAdmin(req);
         LastJSON = json;
         broadcast(json);
     }
+
+//    private final ReportBufferService reportBufferService;
+
+    private final ReportAggregationService svc;
+
+    @PostMapping(value = "/iot/report", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> publish_report(@RequestBody Report report, HttpServletRequest req) {
+        admin.requireAdmin(req);
+        svc.ingestReport(report);
+        svc.applyAvgDeviationFromReport(report);
+        LastJSON = svc.buildStreamdataWithAvg();
+        broadcast(LastJSON);
+        return ResponseEntity.accepted().build();
+    }
+
 }
